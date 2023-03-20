@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
-
+#include <cstdio>
 using namespace std;
+const char filename[50] = "./password.txt";
 class passwordInfo{
 public:
     string appName;
@@ -9,11 +10,11 @@ public:
 };
 
 void add(){
-    ofstream file("./password.txt",ios::app);//Dosya olu?turuldu asl?nda sadece ad? ve nerde oldu?u belli de?il. ayr?ca sadece yazma i?lemlerinde kullan?l?r !
+    ofstream file(filename,ios::app);//Dosya olu?turuldu asl?nda sadece ad? ve nerde oldu?u belli de?il. ayr?ca sadece yazma i?lemlerinde kullan?l?r !
     passwordInfo p1;
     cout << "Uygulamanin adini giriniz : ";
     cin >> p1.appName;
-    cout << "Uygulamanizin sifresini giriniz : ";
+    cout << "\nUygulamanizin sifresini giriniz : ";
     cin >> p1.password;
 
     file.write(p1.appName.c_str(),p1.appName.size());
@@ -31,7 +32,7 @@ void add(){
 
 }
 void list(){
-    ifstream readFile("./password.txt",ios::binary);//Dosya okumak için
+    ifstream readFile(filename,ios::binary);//Dosya okumak için
     char buffer[256];
     if (readFile.is_open()) {
         passwordInfo p1;
@@ -42,10 +43,43 @@ void list(){
 
     readFile.close();
 }
+
+void deletePassword(const char* filename) {
+    if (remove(filename) == 0) {
+        cout << "Dosya silindi!" << endl;
+    }
+    else {
+        cout << "Dosya silinemedi!" << endl;
+    }
+}
+void searchByName(){
+	
+}
+void menu(){
+	int choice;
+	cout << "Ekleme islemi için 1 - Listleme islemi icin 2 - Dosyayi silmek icin 3 - uygulamadan cikmak icin 4" << endl;
+	cin >> choice;
+	
+	switch(choice){
+		case 1:
+			add();
+			menu();
+			break;
+		case 2:
+			list();
+			menu();
+			break;
+		case 3:
+			deletePassword(filename);
+			menu();
+			break;
+		case 4:
+		break;
+				
+	}
+}
 int main() {
-  add();
-    cout << "-----------------------" << endl;
-    list();
+	menu();
     return 0;
 }
 
